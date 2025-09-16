@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Age Validator</title>
+  <style>
+    :root{
+      --bg:#0f1724; 
+      --card:#0b1220; 
+      --accent:#06b6d4; 
+      --success:#16a34a; 
+      --danger:#ef4444; 
+      --muted:#94a3b8;
+    }
+    body{
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#071023 0%, #081226 100%);
+      color: #e6eef6;
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.03);
+      padding:20px;
+      border-radius:12px;
+      width:100%;
+      max-width:420px;
+      box-shadow: 0 6px 30px rgba(2,6,23,0.6);
+    }
+    h1{font-size:1.25rem;margin:0 0 8px 0}
+    p.lead{color:var(--muted);font-size:0.9rem;margin:0 0 16px 0}
+    label{display:block;margin-bottom:8px;font-weight:600}
+    input[type="number"]{
+      width:100%;
+      padding:10px 12px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,0.06);
+      background:transparent;
+      color:inherit;
+      font-size:1rem;
+      box-sizing:border-box;
+    }
+    .row{display:flex;gap:8px;margin-top:12px}
+    button{
+      flex:1;
+      padding:10px 12px;
+      border-radius:8px;
+      border:0;
+      cursor:pointer;
+      font-weight:600;
+      background:var(--accent);
+      color:#022028;
+    }
+    button.secondary{
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.06);
+      color:var(--muted);
+    }
+    .message{
+      margin-top:14px;
+      padding:10px 12px;
+      border-radius:8px;
+      font-weight:600;
+    }
+    .message.success{ 
+      background: rgba(22,163,74,0.12); 
+      color:var(--success); 
+      border:1px solid rgba(22,163,74,0.12) 
+    }
+    .message.error{ 
+      background: rgba(239,68,68,0.08); 
+      color:var(--danger); 
+      border:1px solid rgba(239,68,68,0.08) 
+    }
+    .muted{ 
+      font-size:0.9rem; 
+      color:var(--muted); 
+      margin-top:8px }
+  </style>
+</head>
+<body>
+  <main class="card" role="main">
+    <h1>Age Validator</h1>
+    <p class="lead">Enter your age and click <strong>Validate</strong>. The page uses a custom <code>ValidationError</code> and shows friendly feedback.</p>
+
+    <form id="ageForm" novalidate>
+      <label for="ageInput">Age</label>
+      <input id="ageInput" name="age" type="number" inputmode="numeric" placeholder="Enter age (e.g. 21)" aria-describedby="ageHelp" />
+      <div id="ageHelp" class="muted">Numbers only. Negative or under-18 values will be rejected.</div>
+
+      <div class="row">
+        <button id="validateBtn" type="submit">Validate</button>
+        <button id="clearBtn" type="button" class="secondary">Clear</button>
+      </div>
+
+      <div id="message" role="status" aria-live="polite" style="min-height:38px;margin-top:8px;"></div>
+    </form>
+  </main>
+
+  <script>
+    class ValidationError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "ValidationError";
+      }
+    }
+
+    function validateAge(age) {
+      if (!Number.isFinite(age)) {
+        throw new ValidationError("Please enter a valid number for age.");
+      }
+
+      if (age < 0) {
+        throw new ValidationError("Age cannot be negative!");
+      } else if (age < 18) {
+        throw new ValidationError("You must be at least 18 years old.");
+      }
+
+      return "Valid age: " + age;
+    }
+
+    const form = document.getElementById("ageForm");
+    const ageInput = document.getElementById("ageInput");
+    const messageEl = document.getElementById("message");
+    const clearBtn = document.getElementById("clearBtn");
+
+    function showMessage(text, type = "success") {
+      messageEl.textContent = text;
+      messageEl.className = "message " + (type === "error" ? "error" : "success");
+    }
+
+    function clearMessage() {
+      messageEl.textContent = "";
+      messageEl.className = "";
+    }
+
+    form.addEventListener("submit", (ev) => {
+      ev.preventDefault(); 
+      clearMessage();
+
+      const raw = ageInput.value.trim();
+      const parsed = raw === "" ? NaN : Number(raw);
+
+      try {
+        const result = validateAge(parsed);
+        showMessage(result, "success");
+      } catch (err) {
+        if (err instanceof ValidationError) {
+          showMessage("Validation Error: " + err.message, "error");
+        } else {
+          console.error("Unexpected error validating age:", err);
+          showMessage("An unexpected error occurred. See console for details.", "error");
+        }
+      }
+    });
+
+    clearBtn.addEventListener("click", () => {
+      ageInput.value = "";
+      clearMessage();
+      ageInput.focus();
+    });
+    window.addEventListener("load", () => ageInput.focus());
+  </script>
+</body>
+</html>

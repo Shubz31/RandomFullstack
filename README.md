@@ -1,1 +1,2 @@
-# This is my new Repository.
+# Some useful small sites using JavaScript, Html, CSS, Node, React
+
