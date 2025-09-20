@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Image Descriptions</title>
+  <style>
+    body { font-family: Arial, sans-serif; 
+        text-align: center; 
+        margin: 40px;
+        background-color: beige;
+        
+    }
+    .gallery img { 
+        width: 250px; 
+        height: 250px; 
+        margin: 15px; 
+        cursor: pointer; 
+        border-radius: 8px;
+    }
+    .desc-box {
+        margin-top: 30px;
+        padding: 15px;
+        border: 2px solid #333;
+        display: none;
+        min-width: 300px;
+        border-radius: 8px;
+        background-color: grey;
+    }
+    .desc-box:target {
+        display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <h2 style="background-color: white; width: auto;">PLACES TO VISIT IN PUNE</h2>
+
+  <div class="gallery">
+    <a href="#shaniwarwada">
+      <img src="ShaniwarWada.jpg" alt="Shaniwar Wada">
+    </a>
+
+    <a href="#agakhan">
+      <img src="AgaKhan_Palace.jpg" alt="Aga Khan Palace">
+    </a>
+
+    <a href="#sinhagad">
+      <img src="Sinhagad.jpg" alt="Sinhagad Fort">
+    </a>
+  </div>
+
+  <!-- Descriptions -->
+  <div id="shaniwarwada" class="desc-box">
+    Shaniwar Wada is a historic fortress in Pune, India, built in 1732 by the Peshwa Baji Rao I as the seat of the Maratha Empire’s prime ministers.
+  </div>
+
+  <div id="agakhan" class="desc-box">
+    The Aga Khan Palace in Pune, built by Sultan Muhammed Shah Aga Khan III in 1892, is a historical monument that served as a prison for Mahatma Gandhi and his associates during the Quit India Movement.
+  </div>
+
+  <div id="sinhagad" class="desc-box">
+    Sinhagad Fort is a historic fortress perched atop the Sahyadri Mountains near Pune, India, famous for the 1670 Battle of Sinhagad where Maratha general Tanaji Malusare fought valiantly.
+  </div>
+</body>
+</html>
